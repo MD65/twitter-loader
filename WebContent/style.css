@@ -1,0 +1,250 @@
+/* style.css
+ * This file provides css styles.
+ */
+body,html {
+	background-color: #3b4b54;
+	width: 100%;
+	height: 100%;
+	margin: 0 auto;
+	font-family: "HelveticaNeue-Light", "Helvetica Neue Light",
+		"Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+	color: #ffffff;
+}
+
+a {
+	text-decoration: none;
+	color: #00aed1;
+}
+a:hover {
+	text-decoration: underline;
+}
+
+.newappIcon {
+	position: absolute;
+	left: 20px;
+	top: 0px;
+
+	display: block;
+	max-width: 200px;
+	max-height: 200px;
+	margin: 0 auto;
+}
+
+h1 {
+	font-weight: bold;
+	font-size: 2em;
+	padding-left: 10%;
+	padding-right: 10%;
+	padding-top: 20px;
+	text-align: center;
+}
+
+.loadbutton {
+	font-weight: bold;
+	font-size: 2em !important;
+	margin-top: 20px;
+}
+
+.description {
+	padding-left: 50px;
+	padding-right: 50px;
+	text-align: center;
+}
+
+.blue {
+	color: #00aed1;
+}
+
+/* header footer common */
+header,footer {
+	width: 100%;
+	padding-top: 5%;
+}
+
+/* content width */
+.title,.tips,section,.records {
+	width: 86%;
+}
+
+@media ( max-width : 600px) {
+	.title,.tips,section {
+		width: 100%;
+	}
+}
+
+.center {
+}
+
+/* alignment */
+.title,.tips,section,.records {
+	margin: 0 auto;
+}
+
+/* foreground color */
+.title,.tips {
+	
+}
+
+td {
+	
+}
+/* background color */
+table {
+	width: 100%
+
+	
+}
+
+.leftHalf {
+	float: left;
+	background-color: #26343f;
+	width: 50%;
+	min-height: 75%;
+}
+
+.rightHalf {
+	float: right;
+	width: 50%;
+	background-color: #313f4a;
+	min-height: 75%;
+}
+
+/* positions */
+header {
+
+}
+
+footer {
+	position: relative;
+}
+
+.title,.tips {
+	height: 30px;
+	padding-top: 10px;
+	position: relative;
+}
+
+.title {
+	border-radius: 10px 10px 0 0;
+	font-weight: bolder;
+	font-size: 1.3em;
+}
+
+.tips {
+	border-radius: 0 0 10px 10px;
+}
+
+table {
+	table-layout: fixed;
+	word-wrap: break-word;
+	position: relative;
+	border-collapse: collapse;
+	width: 100%;
+}
+
+.content {
+	padding: 5px;
+}
+
+.records textarea {
+	height: 1.2em;
+	font-size: 1em;
+	resize: none;
+	width: 100%;
+	border: none;
+	background-color: transparent;
+	color: #fff;
+	font-family: "HelveticaNeue-Light", "Helvetica Neue Light",
+		"Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+	font-size: .9em;
+	padding:8px;
+}
+
+button {
+	outline: none;
+}
+
+/* buttons */
+.detailBtn {
+	background: none repeat scroll 0% 0% transparent;
+	border: medium none;
+	float: left;
+}
+
+.addBtn {
+	position: absolute;
+	right: 20px;
+	top: 0px;
+	background: none;
+	border: none;
+}
+
+
+.redArea {
+	background: #BC0000;
+	border: 2px;
+	text-align: center;
+}
+
+.greenArea {
+	background: #00BC00;
+	border: 2px;
+	text-align: center;
+}
+
+.detailBtn img,.addBtn img {
+	
+}
+
+
+/* dynamic effect */
+.records tr:hover .deleteBtn {
+	background: url('images/remove.png') no-repeat 3px;
+	cursor: pointer;
+	border-color: transparent;
+}
+
+.records tr:nth-child(odd) {
+	background: #374550
+}
+
+#dbserviceinfo {
+	border-top: 1px solid #fff;
+}
+
+#dbserviceinfo td {
+	padding: 5px;
+	color: #fff;
+}
+
+.fieldname {
+	float: left;
+	width: 50%;
+}
+
+#tweetquery {
+	margin-bottom: 5px;
+	width: 75%;
+	padding: 6px 2px;
+}
+
+.button {
+	font-size: 1.1em;
+	border: 1px solid #33842A;
+	box-shadow: 0px 0px 1px rgba(0, 0, 0, 0.75);
+	color: #F3F3F3;
+	cursor: pointer;
+	background: none repeat scroll 0% 0% #35B128;
+	padding: 2px 16px 4px;
+}
+
+.centerize {
+    display: block;
+    margin: 0 auto;
+    text-align: center;
+}
+
+#progress p {
+	display: block;
+	padding: 5px;
+}

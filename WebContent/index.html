@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Tweets DB Loader Sample Application</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="viewport"
+	content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+    <h1>
+		Welcome to the <span class="blue">Tweets DB Loader</span> on Bluemix!
+   	</h1>
+	<div class = "leftHalf">
+		<header>
+			<div class="title">
+				<button class="detailBtn" onclick="toggleTwitterInfo()" title="toggle twitter info">
+					<img src="images/twitter.png" alt="twitter details">
+				</button>
+				<span>Select and count tweets</span>
+			</div>
+			<section>
+				<table id='twitterinfo' style='display: none;'>
+					<tbody>
+						<tr>
+							<td class='fieldname'>Service:</td>
+							<td id='envTwitterServiceName'></td>
+						</tr>
+						<tr>
+							<td class='fieldname'>Host: </td>
+							<td id='envTwitterHost'></td>
+						</tr>
+						<tr>
+							<td class='fieldname'>Port: </td>
+							<td id='envTwitterPort'></td>
+						</tr>
+					</tbody>
+				</table>
+			</section>
+		</header>
+		<div class = "center">
+			<section>
+				<p></p>
+				<input id='tweetquery' type='text' size='30' placeholder='Enter your twitter search criteria here...' onkeyup='tweetqueryModified(this)'></input>
+				<button id='countbutton' class="button" onclick="countTweets()" title='count number of tweets' disabled='true'>
+					Count tweets
+				</button>
+			</section>
+			<section>
+				<p></p>
+				<table id='twitterinfo'>
+					<tr>
+						<td id='numtweets' class='redArea'>
+							<br/>No tweets selected...<br/><br/>
+						</td>
+					</tr>
+				</table>
+			</section>
+		</div>
+		<footer>
+			<div class='tips' style='font-size: 75%;'>
+				<p>Example: #IBM (bluemix OR "blue mix") sentiment:positive lang:de posted:2015-01-01T00:00:00,2015-02-02:23:59:59</p>
+				<p>See documentation <a href='https://www.ng.bluemix.net/docs/#services/Twitter/index.html#twitter'>https://www.ng.bluemix.net/docs/#services/Twitter/index.html#twitter</a>.</p>
+			</div>
+		</footer>
+	</div>
+	<div class = "rightHalf">
+		<header>
+			<div class='title'>
+				Select new table name
+				<button class='detailBtn' onclick="toggleDatabaseInfo()"
+					title='toggle database info'>
+					<img src='images/dashdb.png' alt='database details' />
+				</button>
+			</div>
+			<section>
+				<table id='dbinfo' style='display: none;'>
+					<tbody>
+						<tr>
+							<td class='fieldname'>Service:</td>
+							<td id='envDbServiceName'></td>
+						</tr>
+						<tr>
+							<td class='fieldname'>Host:</td>
+							<td id='envDbHost'></td>
+						</tr>
+						<tr>
+							<td class='fieldname'>Port:</td>
+							<td id='envDbPort'></td>
+						</tr>
+						<tr>
+							<td class='fieldname'>Database:</td>
+							<td id='envDbName'></td>
+						</tr>
+					</tbody>
+				</table>
+			</section>
+		</header>
+		<div class = "center">
+			<section>
+				<p></p>
+				<div id='tablelist' width='70%' height='20%' >
+				Loading existing table names...
+				</div>
+			</section>
+			<section>
+				<p></p>
+				<button id='togglecolumns' onclick="toggleColumns(this)" title='toggle column details' style='background-color: #000000; color: #FFFFFF;'>&gt;</button>
+				<input id='tablename' type='text' size='30' placeholder='Enter your table name here...' onkeyup='tablenameModified(this)'></input>
+			</section>
+			<section>
+				<table id='columns' width='90%' style='font-size: 75%; border: 1; display: none'>
+					<thead><tr><td width='5%'></td><td max-width='20%'>column</td><td min-width='25%'>type</td><td width='50%'>twitter tag</td></tr></thead>
+					<tr><td><input type='checkbox' onchange='checkColumns()' checked></input></td><td><input type='text' style='font-size: 75%; max-width: 75%;' onkeyup='checkColumns()' value='msgId'></input></td><td>VARCHAR(128)</td><td>message.id</td></tr>
+					<tr><td><input type='checkbox' onchange='checkColumns()' checked></input></td><td><input type='text' style='font-size: 75%; max-width: 75%;' onkeyup='checkColumns()' value='msgType'></input></td><td>VARCHAR(128)</td><td>message.verb</td></tr>
+					<tr><td><input type='checkbox' onchange='checkColumns()' checked></input></td><td><input type='text' style='font-size: 75%; max-width: 75%;' onkeyup='checkColumns()' value='msgPostedTime'></input></td><td>TIMESTAMP</td><td>message.postedTime</td></tr>
+					<tr><td><input type='checkbox' onchange='checkColumns()' checked></input></td><td><input type='text' style='font-size: 75%; max-width: 75%;' onkeyup='checkColumns()' value='msgBody'></input></td><td>VARCHAR(2048)</td><td>message.body</td></tr>
+					<tr><td><input type='checkbox' onchange='checkColumns()' checked></input></td><td><input type='text' style='font-size: 75%; max-width: 75%;' onkeyup='checkColumns()' value='msgRetweet'></input></td><td>VARCHAR(2048)</td><td>message.retweetCount</td></tr>
+					<tr><td><input type='checkbox' onchange='checkColumns()' checked></input></td><td><input type='text' style='font-size: 75%; max-width: 75%;' onkeyup='checkColumns()' value='msgHashtags'></input></td><td>VARCHAR(2048)</td><td>message.twitter_entities.hashtags</td></tr>
+					<tr><td><input type='checkbox' onchange='checkColumns()'></input></td><td><input type='text' style='font-size: 75%; max-width: 75%;' onkeyup='checkColumns()' value='msgCoordType'></input></td><td>VARCHAR(128)</td><td>message.gnip.profileLocations.geo.type</td></tr>
+					<tr><td><input type='checkbox' onchange='checkColumns()'></input></td><td><input type='text' style='font-size: 75%; max-width: 75%;' onkeyup='checkColumns()' value='msgCoordinates'></input></td><td>VARCHAR(2048)</td><td>message.gnip.profileLocations.geo.coordinates</td></tr>
+					<tr><td><input type='checkbox' onchange='checkColumns()' checked></input></td><td><input type='text' style='font-size: 75%; max-width: 75%;' onkeyup='checkColumns()' value='smaAuthorCountry'></input></td><td>VARCHAR(128)</td><td>cde.author.location.country</td></tr>
+					<tr><td><input type='checkbox' onchange='checkColumns()' checked></input></td><td><input type='text' style='font-size: 75%; max-width: 75%;' onkeyup='checkColumns()' value='smaAuthorState'></input></td><td>VARCHAR(128)</td><td>cde.author.location.state</td></tr>
+					<tr><td><input type='checkbox' onchange='checkColumns()' checked></input></td><td><input type='text' style='font-size: 75%; max-width: 75%;' onkeyup='checkColumns()' value='smaAuthorCity'></input></td><td>VARCHAR(128)</td><td>cde.author.location.city</td></tr>
+					<tr><td><input type='checkbox' onchange='checkColumns()' checked></input></td><td><input type='text' style='font-size: 75%; max-width: 75%;' onkeyup='checkColumns()' value='smaAuthorGender'></input></td><td>VARCHAR(128)</td><td>cde.author.gender</td></tr>
+					<tr><td><input type='checkbox' onchange='checkColumns()' checked></input></td><td><input type='text' style='font-size: 75%; max-width: 75%;' onkeyup='checkColumns()' value='smaSentiment'></input></td><td>VARCHAR(128)</td><td>cde.content.sentiment.polarity</td></tr>
+<!--					<tr><td><input type='checkbox' onchange='checkColumns()' checked></input></td><td><input type='text' style='font-size: 75%' onkeyup='checkColumns()' value='generatorDisplayName'></input></td><td>VARCHAR(128)</td><td>message.generator.displayName</td></tr>-->
+					<tr><td><input type='checkbox' onchange='checkColumns()' checked></input></td><td><input type='text' style='font-size: 75%; max-width: 75%;' onkeyup='checkColumns()' value='userId'></input></td><td>VARCHAR(128)</td><td>message.actor.id</td></tr>
+					<tr><td><input type='checkbox' onchange='checkColumns()' checked></input></td><td><input type='text' style='font-size: 75%; max-width: 75%;' onkeyup='checkColumns()' value='userDisplayName'></input></td><td>VARCHAR(128)</td><td>message.actor.displayName</td></tr>
+					<tr><td><input type='checkbox' onchange='checkColumns()' checked></input></td><td><input type='text' style='font-size: 75%; max-width: 75%;' onkeyup='checkColumns()' value='userPreferredUsername'></input></td><td>VARCHAR(128)</td><td>message.actor.preferredUsername</td></tr>
+					<tr><td><input type='checkbox' onchange='checkColumns()'></input></td><td><input type='text' style='font-size: 75%; max-width: 75%;' onkeyup='checkColumns()' value='userLink'></input></td><td>VARCHAR(256)</td><td>message.actor.links.href</td></tr>
+					<tr><td><input type='checkbox' onchange='checkColumns()'></input></td><td><input type='text' style='font-size: 75%; max-width: 75%;' onkeyup='checkColumns()' value='userLocation'></input></td><td>VARCHAR(128)</td><td>message.actor.location.displayName</td></tr>
+					<tr><td><input type='checkbox' onchange='checkColumns()'></input></td><td><input type='text' style='font-size: 75%; max-width: 75%;' onkeyup='checkColumns()' value='userUtcOffset'></input></td><td>VARCHAR(128)</td><td>message.actor.utcOffset</td></tr>
+					<tr><td><input type='checkbox' onchange='checkColumns()' checked></input></td><td><input type='text' style='font-size: 75%; max-width: 75%;' onkeyup='checkColumns()' value='userLanguage'></input></td><td>VARCHAR(128)</td><td>message.actor.languages</td></tr>
+					<tr><td><input type='checkbox' onchange='checkColumns()' checked></input></td><td><input type='text' style='font-size: 75%; max-width: 75%;' onkeyup='checkColumns()' value='userFollowersCount'></input></td><td>INTEGER</td><td>message.actor.followersCount</td></tr>
+					<tr><td><input type='checkbox' onchange='checkColumns()' checked></input></td><td><input type='text' style='font-size: 75%; max-width: 75%;' onkeyup='checkColumns()' value='userFriendsCount'></input></td><td>INTEGER</td><td>message.actor.friendsCount</td></tr>
+					<tr><td><input type='checkbox' onchange='checkColumns()' checked></input></td><td><input type='text' style='font-size: 75%; max-width: 75%;' onkeyup='checkColumns()' value='userListedCount'></input></td><td>INTEGER</td><td>message.actor.listedCount</td></tr>
+					<tr><td><input type='checkbox' onchange='checkColumns()' checked></input></td><td><input type='text' style='font-size: 75%; max-width: 75%;' onkeyup='checkColumns()' value='userStatusesCount'></input></td><td>INTEGER</td><td>message.actor.statusesCount</td></tr>
+<!--					<tr><td><input type='checkbox' onchange='checkColumns()' checked></input></td><td><input type='text' style='font-size: 75%' onkeyup='checkColumns()' value='userVerified'></input></td><td>VARCHAR(5)</td><td>message.actor.verified</td></tr>-->
+				</table>
+			</section>
+			<section>
+				<p></p>
+				<table>
+					<tr>
+						<td id='tableok' class='redArea'>
+							<br/>No table name...<br/><br/>
+						</td>
+					</tr>
+				</table>
+			</section>
+		</div>
+		<footer>
+			<div class='tips' style='font-size: 75%;'>
+				<p>Specify a non-existing table name... The name is case-sensitive.</p>
+			</div>
+		</footer>
+	</div>
+	<div class="centerize">
+		<section id='loadarea'>
+			<button id='loadbutton' class='button loadbutton' onclick="startLoad()" title='insert tweets into table' disabled='true'>Insert tweets</button>
+		</section>
+		<section id='progress' style='width: 100%; display: none;'>
+			<progress class='loadbutton' max='1.0' value='0.0'></progress>
+			<p>Not loaded...</p>
+		</section>
+		<section id='log'>
+		</section>
+	</div>
+	
+	<script type="text/javascript" src="util.js"></script>
+	<script type="text/javascript" src="index.js"></script>
+				
+
+</body>
+</html>
